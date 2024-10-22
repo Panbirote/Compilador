@@ -1,4 +1,49 @@
 import re
+arrayAritmetico = {
+    "+",
+    "-",
+    "*",
+    "/",
+    "%",
+    "^",
+}
+
+arrayRelacional = {
+    "=",
+    "!=",
+    ">",
+    "<",
+    ">=",
+    "<=",
+    "==",
+}
+
+arrayLogico = {
+    "&",
+    "||",
+    "!",
+}
+
+arrayAsignacion = {
+    "=",
+    "+=",
+    "-=",
+    "*=",
+    "%=",
+    "/=",
+}
+
+arrayEspecial = {
+    ";", 
+    ",", 
+    "(", 
+    ")", 
+    "{", 
+    "}", 
+    "[", 
+    "]", 
+    ":"
+}
 
 class Nodo:
     def __init__(self, tipo, lexema, valor, renglon, columna):
@@ -32,7 +77,11 @@ def imprimir_lista(lista):
     print("| Lexema     | Tipo             | Valor            | Renglon  | Columna  |")
     print("+------------+------------------+------------------+----------+----------+")
     while temp is not None:
-        print(f"| {temp.lexema:<10} | {temp.tipo:<16} | {temp.valor:<16} | {temp.renglon:<8} | {temp.columna:<8} |")
+        if (temp.valor.isdigit()) :
+            print(f"| {temp.lexema:<10} | {temp.tipo:<16} | {temp.valor:<16} | {temp.renglon:<8} | {temp.columna:<8} |")
+        else :
+            print(f"| {temp.lexema:<10} | {temp.tipo:<16} |                  | {temp.renglon:<8} | {temp.columna:<8} |")
+            
         temp = temp.siguiente  # Pasamos al siguiente nodo
     print("+------------+------------------+------------------+----------+----------+")
 
@@ -50,18 +99,38 @@ palabras_reservadas = [
 def es_palabra_reservada(lexema):
     return lexema in palabras_reservadas
 
-# Lista de símbolos especiales (operadores aritmeticos,relacionales, logicos y de asignación)
-simbolos = [
-    "+", "-", "*", "/", "=", "==", "!=", "<", ">", "<=", ">=", ";", ",", "(", ")", "{", "}", "[", "]", ":"
-]
-
 # Función que verifica si un lexema es un símbolo especial
 def es_simbolo_especial(lexema):
-    return lexema in simbolos
+    return lexema in arrayEspecial
+
+# Función que verifica si un lexema es un símbolo aritmetico
+def es_simbolo_Aritmetico(lexema):
+    return lexema in arrayAritmetico
+
+# Función que verifica si un lexema es un símbolo relacional
+def es_simbolo_Relacional(lexema):
+    return lexema in arrayRelacional
+
+# Función que verifica si un lexema es un símbolo relacional
+def es_simbolo_Logico(lexema):
+    return lexema in arrayLogico
+
+# Función que verifica si un lexema es un símbolo relacional
+def es_simbolo_Asignacion(lexema):
+    return lexema in arrayAsignacion
 
 # Función que verifica si un carácter es un símbolo especial
 def es_simbolo_especial_caracter(c):
-    return c in "+-*/=(){}[];:,"
+    if es_simbolo_especial(c):
+        return True
+    elif es_simbolo_Aritmetico(c):
+        return True
+    elif es_simbolo_Relacional(c):
+        return True
+    elif es_simbolo_Logico(c):
+        return True
+    else :
+        return False
 
 # Automata que procesa identificadores y palabras reservadas
 def automata_identificador(linea, i, renglon, lista_tokens):
@@ -94,23 +163,38 @@ def automata_numero(linea, i, renglon, lista_tokens):
 
     # Si el número tiene punto decimal, es un número real, si no, es entero
     if es_real:
-        lista_tokens = agregar_nodo(lista_tokens, "Numero real", lexema, lexema, renglon, i - len(lexema) + 1)
+        lista_tokens = agregar_nodo(lista_tokens, "Numero Real", lexema, lexema, renglon, i - len(lexema) + 1)
     else:
-        lista_tokens = agregar_nodo(lista_tokens, "Numero entero", lexema, lexema, renglon, i - len(lexema) + 1)
+        lista_tokens = agregar_nodo(lista_tokens, "Numero Entero", lexema, lexema, renglon, i - len(lexema) + 1)
     return i - 1, lista_tokens
 
 # Automata que maneja símbolos especiales
 def automata_simbolo(linea, i, renglon, lista_tokens):
     # Probamos si es un símbolo doble (por ejemplo, "==" o ">=")
-    lexema = linea[i:i+2]
-    if es_simbolo_especial(lexema):
-        lista_tokens = agregar_nodo(lista_tokens, "Simbolo especial", lexema, lexema, renglon, i + 1)
+    lexemaDoble = linea[i:i+2]
+    lexema = linea[i]
+    if es_simbolo_Relacional(lexemaDoble):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Relacional", lexemaDoble, lexemaDoble, renglon, i + 1)
         i += 1  # Avanzamos dos posiciones porque es un símbolo doble
-    else:
-        lexema = linea[i]  # Si no es doble, tomamos el símbolo simple
-        lista_tokens = agregar_nodo(lista_tokens, "Simbolo especial", lexema, lexema, renglon, i + 1)
+    elif es_simbolo_Logico(lexemaDoble):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Logico", lexemaDoble, lexemaDoble, renglon, i + 1)
+        i += 1  # Avanzamos dos posiciones porque es un símbolo doble
+    elif es_simbolo_Asignacion(lexemaDoble):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Asignación", lexemaDoble, lexemaDoble, renglon, i + 1)
+        i += 1  # Avanzamos dos posiciones porque es un símbolo doble
+    elif es_simbolo_Aritmetico(lexema):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Aritmetico", lexema, lexema, renglon, i + 1)
+    elif es_simbolo_Relacional(lexema):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Relacional", lexema, lexema, renglon, i + 1)
+    elif es_simbolo_Logico(lexema):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Logico", lexema, lexema, renglon, i + 1)
+    elif es_simbolo_Asignacion(lexema):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Asignación", lexema, lexema, renglon, i + 1)
+    elif es_simbolo_especial(lexema):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Especial", lexema, lexema, renglon, i + 1)
     return i, lista_tokens
 
+    
 # Función que analiza una línea completa de texto
 def analizar(linea, renglon, lista_tokens):
     i = 0
@@ -127,7 +211,7 @@ def analizar(linea, renglon, lista_tokens):
 # Función principal
 def main():
     try:
-        with open("D:\Documents\Software_de_sistemas\Compilador\codigo.txt", "r") as archivo:
+        with open("D:\compilador\codigo.txt", "r") as archivo:
             lista_tokens = None  # Inicializamos la lista de tokens como vacía
             renglon = 1
             for linea in archivo:
