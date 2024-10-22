@@ -9,7 +9,7 @@ arrayAritmetico = {
 }
 
 arrayRelacional = {
-    "=",
+    # "=",
     "!=",
     ">",
     "<",
@@ -92,7 +92,7 @@ def lista_esta_vacia(lista):
 # Lista de palabras reservadas
 palabras_reservadas = [
     "Si", "Sino", "Mientras", "para", "Entero", "Flotante", "Caracter", "Volver",
-    "vacio", "Romper", "Continuar", "switch", "Caso", "Predeter"
+    "vacio", "Romper", "Continuar", "switch", "Caso", "Predeter", "Clase", 
 ]
 
 # Función que verifica si un lexema es una palabra reservada
@@ -111,11 +111,11 @@ def es_simbolo_Aritmetico(lexema):
 def es_simbolo_Relacional(lexema):
     return lexema in arrayRelacional
 
-# Función que verifica si un lexema es un símbolo relacional
+# Función que verifica si un lexema es un símbolo Logifoc
 def es_simbolo_Logico(lexema):
     return lexema in arrayLogico
 
-# Función que verifica si un lexema es un símbolo relacional
+# Función que verifica si un lexema es un símbolo asignacion
 def es_simbolo_Asignacion(lexema):
     return lexema in arrayAsignacion
 
@@ -184,12 +184,12 @@ def automata_simbolo(linea, i, renglon, lista_tokens):
         i += 1  # Avanzamos dos posiciones porque es un símbolo doble
     elif es_simbolo_Aritmetico(lexema):
         lista_tokens = agregar_nodo(lista_tokens, "Simbolo Aritmetico", lexema, lexema, renglon, i + 1)
+    elif es_simbolo_Asignacion(lexema):
+        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Asignación", lexema, lexema, renglon, i + 1)
     elif es_simbolo_Relacional(lexema):
         lista_tokens = agregar_nodo(lista_tokens, "Simbolo Relacional", lexema, lexema, renglon, i + 1)
     elif es_simbolo_Logico(lexema):
         lista_tokens = agregar_nodo(lista_tokens, "Simbolo Logico", lexema, lexema, renglon, i + 1)
-    elif es_simbolo_Asignacion(lexema):
-        lista_tokens = agregar_nodo(lista_tokens, "Simbolo Asignación", lexema, lexema, renglon, i + 1)
     elif es_simbolo_especial(lexema):
         lista_tokens = agregar_nodo(lista_tokens, "Simbolo Especial", lexema, lexema, renglon, i + 1)
     return i, lista_tokens
