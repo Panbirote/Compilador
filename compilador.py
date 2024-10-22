@@ -42,8 +42,8 @@ def lista_esta_vacia(lista):
 
 # Lista de palabras reservadas
 palabras_reservadas = [
-    "abs", "Verdadero", "Falso", "Y", "Como ", "Romper", "Clase", "Continuar", "Si", "Importa", "En", "Es", "Anon", "Nolocal", "Con", "Rendir",
-    "Definir", "Borrar", "O", "Además", "Excepto", "Final", "Para", "De", "Global", "No", "O", "Pasa", "Levantar", "Volver", "Probar", "Mientras"
+    "Si", "Sino", "Mientras", "para", "Entero", "Flotante", "Caracter", "Volver",
+    "vacio", "Romper", "Continuar", "switch", "Caso", "Predeter"
 ]
 
 # Función que verifica si un lexema es una palabra reservada
@@ -52,7 +52,7 @@ def es_palabra_reservada(lexema):
 
 # Lista de símbolos especiales (operadores aritmeticos,relacionales, logicos y de asignación)
 simbolos = [
-    "+", "-", "*", "/", "=", "==", "!=", "<", ">", "<=", ">=", ";", ",", "(", ")", "{", "}", "[", "]","/=", "&", "%=", "*=", ":"
+    "+", "-", "*", "/", "=", "==", "!=", "<", ">", "<=", ">=", ";", ",", "(", ")", "{", "}", "[", "]", ":"
 ]
 
 # Función que verifica si un lexema es un símbolo especial
