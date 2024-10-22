@@ -91,8 +91,8 @@ def lista_esta_vacia(lista):
 
 # Lista de palabras reservadas
 palabras_reservadas = [
-    "Si", "Sino", "Mientras", "para", "Entero", "Flotante", "Caracter", "Volver",
-    "vacio", "Romper", "Continuar", "switch", "Caso", "Predeter", "Clase", 
+    "Si", "Sino", "Mientras", "para", "Entero", "Flotante", "Caracter", "Volver", "Regresa", "Ir",
+    "vacio", "Romper", "Continuar", "switch", "Caso", "Predeter", "Clase", "Flotante", "Constante"
 ]
 
 # Función que verifica si un lexema es una palabra reservada
